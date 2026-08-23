@@ -44,7 +44,6 @@ The platform focuses on making destination information easier to discover, compa
 | Geocoding      | Geoapify API, Axios                                |
 | Image Storage  | Cloudinary, Multer                                 |
 | Security       | Helmet, express-mongo-sanitize, express-rate-limit |
-| Validation     | Joi                                                |
 | Deployment     | Render                                             |
 
 ---
@@ -130,11 +129,4 @@ TravelAtlas is deployed as a Node.js web service on **Render** and uses **MongoD
 
 ---
 
-## 🔮 Future Improvements
-
-* **Destination Bookmarks & Travel Lists** — Allow users to save destinations and organize personal travel plans.
-* **Helpful Votes** — Let the community upvote useful reviews and travel tips.
-* **Weather Integration** — Display destination-specific weather information.
-* **Advanced Filters** — Add filtering based on accessibility, budget, and trip duration.
-* **Personalized Recommendations** — Suggest destinations based on user interests and activity.
 
