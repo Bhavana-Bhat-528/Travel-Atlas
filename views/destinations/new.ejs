@@ -1,0 +1,150 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
+        <h2 class="fw-bold mb-2"><i class="fa-solid fa-plus-circle text-primary me-2"></i> Add New Destination</h2>
+        <p class="text-muted mb-4">
+          Contribute a new sightseeing destination to TravelAtlas. Coordinates will be automatically computed using Geoapify!
+        </p>
+
+        <!-- Live Duplicate Warning Alert Container -->
+        <div id="duplicate-warning" class="d-none mb-4"></div>
+
+        <form action="/destinations" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Destination Name / Title <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              id="dest-title"
+              name="destination[title]"
+              class="form-control form-control-lg"
+              placeholder="e.g. Dudhsagar Waterfalls, Munnar Tea Gardens, Taj Mahal"
+              required
+            />
+            <div class="invalid-feedback">Please enter a destination title.</div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">State / Region <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                id="dest-state"
+                name="destination[state]"
+                class="form-control"
+                placeholder="e.g. Goa, Kerala, Uttar Pradesh"
+                required
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Country <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                name="destination[country]"
+                class="form-control"
+                placeholder="e.g. India, Japan, France"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
+            <select name="destination[category]" class="form-select" required>
+              <option value="" disabled selected>Select a category...</option>
+              <% categories.forEach(cat => { %>
+                <option value="<%= cat %>"><%= cat %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Description <span class="text-danger">*</span></label>
+            <textarea
+              name="destination[description]"
+              rows="5"
+              class="form-control"
+              placeholder="Describe the place, its historical or natural significance, main attractions, key highlights..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Cover Image (Optional)</label>
+            <input type="file" name="coverImage" class="form-control" accept="image/*" />
+            <small class="form-text text-muted">Upload a cover image. If empty, a default image will be provided.</small>
+          </div>
+
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-ta-emerald btn-lg px-4">
+              <i class="fa-solid fa-cloud-arrow-up me-2"></i> Create Destination
+            </button>
+            <a href="/destinations" class="btn btn-outline-secondary btn-lg px-4">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const titleInput = document.getElementById('dest-title');
+    const stateInput = document.getElementById('dest-state');
+    const warningBox = document.getElementById('duplicate-warning');
+    let timer = null;
+
+    const checkDuplicate = async () => {
+      const title = titleInput ? titleInput.value.trim() : '';
+      const state = stateInput ? stateInput.value.trim() : '';
+
+      if (!title || title.length < 2) {
+        warningBox.classList.add('d-none');
+        warningBox.innerHTML = '';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/destinations/check-duplicate?title=${encodeURIComponent(title)}&state=${encodeURIComponent(state)}`);
+        const data = await res.json();
+
+        if (data.exists && data.destination) {
+          warningBox.innerHTML = `
+            <div class="alert alert-warning border-0 shadow-sm rounded-4 p-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+              <div>
+                <div class="fw-bold text-dark mb-1"><i class="fa-solid fa-triangle-exclamation text-warning me-2"></i> Destination Already Exists!</div>
+                <small class="text-secondary">"<strong>${data.destination.title}</strong>" is already listed in ${data.destination.state}, ${data.destination.country}. To keep TravelAtlas clean, please contribute your tips to the existing page!</small>
+              </div>
+              <a href="/destinations/${data.destination.id}" class="btn btn-sm btn-warning text-dark fw-bold text-nowrap">
+                Contribute to Existing Page &rarr;
+              </a>
+            </div>
+          `;
+          warningBox.classList.remove('d-none');
+        } else {
+          warningBox.classList.add('d-none');
+          warningBox.innerHTML = '';
+        }
+      } catch (e) {
+        console.error('Duplicate check failed', e);
+      }
+    };
+
+    if (titleInput) {
+      titleInput.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(checkDuplicate, 400);
+      });
+    }
+
+    if (stateInput) {
+      stateInput.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(checkDuplicate, 400);
+      });
+    }
+  });
+</script>

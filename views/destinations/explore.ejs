@@ -1,0 +1,122 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container py-4">
+  <!-- Search Header & Category Filter Bar -->
+  <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+    <div class="row align-items-center g-3">
+      <div class="col-lg-6">
+        <h2 class="fw-bold mb-1"><i class="fa-solid fa-earth-americas text-primary me-2"></i> Explore Destinations</h2>
+        <p class="text-muted small mb-0">Browse real community travel guides across various categories</p>
+      </div>
+
+      <div class="col-lg-6">
+        <form action="/destinations" method="GET" class="d-flex gap-2">
+          <input
+            type="text"
+            name="search"
+            class="form-control rounded-3"
+            placeholder="Search by name, state, or country..."
+            value="<%= searchQuery %>"
+          />
+          <% if(selectedCategory && selectedCategory !== 'All') { %>
+            <input type="hidden" name="category" value="<%= selectedCategory %>" />
+          <% } %>
+          <button type="submit" class="btn btn-ta-primary">Search</button>
+          <% if(searchQuery || (selectedCategory && selectedCategory !== 'All')) { %>
+            <a href="/destinations" class="btn btn-outline-secondary" title="Clear Filters"><i class="fa-solid fa-xmark"></i></a>
+          <% } %>
+        </form>
+      </div>
+    </div>
+
+    <!-- Category Filter Pills -->
+    <div class="d-flex gap-2 overflow-x-auto pt-3 pb-2 mt-2 border-top">
+      <% categories.forEach(cat => { %>
+        <a
+          href="/destinations?<%= cat !== 'All' ? 'category=' + cat : '' %><%= searchQuery ? (cat !== 'All' ? '&search=' : 'search=') + searchQuery : '' %>"
+          class="category-pill <%= selectedCategory === cat ? 'active' : '' %>"
+        >
+          <%= cat %>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+
+  <!-- Destination Cards Grid -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <% if(destinations && destinations.length > 0) { %>
+      <h5 class="fw-bold mb-0">Found <%= destinations.length %> Destinations</h5>
+    <% } else { %>
+      <h5 class="fw-bold mb-0 text-muted">No Exact Match Found</h5>
+    <% } %>
+    <% if(currentUser) { %>
+      <a href="/destinations/new" class="btn btn-sm btn-ta-emerald">
+        <i class="fa-solid fa-plus me-1"></i> Add Destination
+      </a>
+    <% } %>
+  </div>
+
+  <% if(destinations && destinations.length === 0 && nearbyDestinations && nearbyDestinations.length > 0) { %>
+    <div class="alert alert-info border-0 shadow-sm rounded-4 mb-4 d-flex align-items-center gap-3">
+      <i class="fa-solid fa-circle-info fs-3 text-info"></i>
+      <div>
+        <h6 class="fw-bold mb-0">No exact match for "<%= searchQuery %>"</h6>
+        <small class="text-muted">Don't worry! Here are nearby / popular destinations you can explore or contribute to:</small>
+      </div>
+    </div>
+  <% } %>
+
+  <div class="row g-4 mb-5">
+    <% const listToDisplay = (destinations && destinations.length > 0) ? destinations : (nearbyDestinations || []); %>
+    <% if(listToDisplay && listToDisplay.length > 0) { %>
+      <% listToDisplay.forEach(dest => { %>
+        <div class="col-md-6 col-lg-4">
+          <div class="ta-card h-100 position-relative">
+            <span class="destination-card-badge">
+              <i class="fa-solid fa-tag me-1"></i> <%= dest.category %>
+            </span>
+            <span class="destination-rating-badge">
+              <i class="fa-solid fa-star text-warning"></i> <%= dest.averageRating ? dest.averageRating.toFixed(1) : 'New' %>
+            </span>
+
+            <img
+              src="<%= dest.coverImage?.url || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80' %>"
+              alt="<%= dest.title %>"
+              class="destination-card-img"
+            />
+
+            <div class="p-4 d-flex flex-column justify-content-between">
+              <div>
+                <h5 class="fw-bold mb-1 text-truncate"><%= dest.title %></h5>
+                <p class="small text-muted mb-2">
+                  <i class="fa-solid fa-location-dot text-danger me-1"></i> <%= dest.state %>, <%= dest.country %>
+                </p>
+                <p class="small text-secondary text-truncate-2 mb-3">
+                  <%= dest.description.substring(0, 100) %>...
+                </p>
+              </div>
+
+              <div class="pt-2 border-top d-flex align-items-center justify-content-between">
+                <span class="small text-muted">
+                  <i class="fa-solid fa-comments me-1"></i> <%= dest.reviews?.length || 0 %> Reviews
+                </span>
+                <a href="/destinations/<%= dest._id %>" class="btn btn-sm btn-ta-primary">
+                  View Page &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="col-12 text-center py-5">
+        <div class="p-5 bg-white rounded-4 border shadow-sm">
+          <i class="fa-solid fa-compass-slash fs-1 text-muted mb-3"></i>
+          <h4 class="fw-bold">No destinations match your criteria</h4>
+          <p class="text-muted">Be the first to contribute this place to TravelAtlas!</p>
+          <a href="/destinations/new" class="btn btn-ta-primary mt-2">Add New Destination</a>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>

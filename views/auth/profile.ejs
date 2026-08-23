@@ -1,0 +1,133 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container py-5">
+  <!-- Profile Header Card -->
+  <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white mb-5">
+    <div class="row align-items-center g-4">
+      <div class="col-auto">
+        <img
+          src="<%= profileUser.profileImage?.url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80' %>"
+          alt="<%= profileUser.username %>"
+          class="rounded-circle shadow"
+          style="width: 110px; height: 110px; object-fit: cover; border: 4px solid #38bdf8;"
+        />
+      </div>
+
+      <div class="col">
+        <div class="d-flex flex-wrap align-items-center gap-3">
+          <h2 class="fw-bold mb-0"><%= profileUser.username %></h2>
+          <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill font-heading">
+            <i class="fa-solid fa-award me-1"></i> Community Explorer
+          </span>
+        </div>
+        <p class="text-muted mt-2 mb-2"><%= profileUser.bio || 'Passionate traveler exploring the world with TravelAtlas.' %></p>
+        <div class="small text-muted">
+          <i class="fa-solid fa-calendar-day me-1"></i> Member since <%= profileUser.createdAt ? profileUser.createdAt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '2026' %>
+        </div>
+      </div>
+
+      <% if(currentUser && currentUser._id.equals(profileUser._id)) { %>
+        <div class="col-12 col-md-auto d-flex gap-2">
+          <a href="/profile/edit/me" class="btn btn-outline-primary">
+            <i class="fa-solid fa-user-pen me-1"></i> Edit Profile
+          </a>
+          <form action="/profile/delete/me?_method=DELETE" method="POST" onsubmit="return confirm('WARNING: Deleting your account cannot be undone. Your contributed reviews & destinations will remain preserved as Anonymous Traveler to protect community knowledge. Proceed?');">
+            <button type="submit" class="btn btn-outline-danger">
+              <i class="fa-solid fa-user-xmark me-1"></i> Delete Account
+            </button>
+          </form>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Contribution Stats & Tabs -->
+  <ul class="nav nav-pills nav-fill mb-4 p-2 bg-white rounded-4 shadow-sm border" id="profileTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link active rounded-3 font-heading fw-bold"
+        id="destinations-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#destinations-pane"
+        type="button"
+        role="tab"
+      >
+        <i class="fa-solid fa-location-dot me-2"></i> Destinations Added (<%= destinationsAdded.length %>)
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link rounded-3 font-heading fw-bold"
+        id="reviews-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#reviews-pane"
+        type="button"
+        role="tab"
+      >
+        <i class="fa-solid fa-comments me-2"></i> Reviews Written (<%= reviewsWritten.length %>)
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="profileTabsContent">
+    <!-- Tab 1: Destinations Added -->
+    <div class="tab-pane fade show active" id="destinations-pane" role="tabpanel">
+      <div class="row g-4">
+        <% if(destinationsAdded && destinationsAdded.length > 0) { %>
+          <% destinationsAdded.forEach(dest => { %>
+            <div class="col-md-6 col-lg-4">
+              <div class="ta-card h-100 position-relative">
+                <span class="destination-card-badge"><%= dest.category %></span>
+                <img src="<%= dest.coverImage?.url || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80' %>" alt="<%= dest.title %>" class="destination-card-img" />
+                <div class="p-4 d-flex flex-column justify-content-between">
+                  <div>
+                    <h5 class="fw-bold mb-1"><%= dest.title %></h5>
+                    <p class="small text-muted mb-2"><i class="fa-solid fa-location-dot text-danger me-1"></i> <%= dest.state %>, <%= dest.country %></p>
+                  </div>
+                  <a href="/destinations/<%= dest._id %>" class="btn btn-sm btn-ta-primary mt-2">View Single Destination Page</a>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="col-12 text-center py-5 bg-white rounded-4 border">
+            <p class="text-muted mb-0">No destinations added yet.</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Tab 2: Reviews Written -->
+    <div class="tab-pane fade" id="reviews-pane" role="tabpanel">
+      <div class="d-flex flex-column gap-3">
+        <% if(reviewsWritten && reviewsWritten.length > 0) { %>
+          <% reviewsWritten.forEach(rev => { %>
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold mb-0">
+                  <a href="/destinations/<%= rev.destination?._id %>" class="text-decoration-none text-dark">
+                    <%= rev.destination?.title || 'Destination' %>
+                  </a>
+                </h5>
+                <span class="text-warning">
+                  <% for(let i=1; i<=5; i++) { %>
+                    <i class="fa-<%= i <= rev.rating ? 'solid' : 'regular' %> fa-star"></i>
+                  <% } %>
+                </span>
+              </div>
+              <p class="text-secondary small mb-2"><%= rev.review %></p>
+              <div class="d-flex justify-content-between align-items-center small text-muted">
+                <span>Visited in <%= rev.visitedSeason %> &bull; Mode: <%= rev.travelMode %></span>
+                <a href="/destinations/<%= rev.destination?._id %>" class="fw-semibold text-primary">Go to Page &rarr;</a>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="text-center py-5 bg-white rounded-4 border">
+            <p class="text-muted mb-0">No reviews written yet.</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>

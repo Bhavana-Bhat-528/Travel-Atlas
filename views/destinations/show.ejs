@@ -1,0 +1,375 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container py-4">
+  <!-- Hero Section & Header -->
+  <div class="show-hero mb-4">
+    <img
+      src="<%= destination.coverImage?.url || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80' %>"
+      alt="<%= destination.title %>"
+      class="show-hero-img"
+    />
+    <div class="show-hero-overlay">
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+        <span class="badge bg-primary px-3 py-2 rounded-pill font-heading">
+          <i class="fa-solid fa-tag me-1"></i> <%= destination.category %>
+        </span>
+        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill font-heading">
+          <i class="fa-solid fa-star me-1"></i> <%= destination.averageRating ? destination.averageRating.toFixed(1) : 'New' %> / 5 (<%= destination.reviews.length %> reviews)
+        </span>
+      </div>
+      <h1 class="display-4 fw-bold text-white mb-1"><%= destination.title %></h1>
+      <p class="fs-5 text-slate-200 mb-0">
+        <i class="fa-solid fa-location-dot text-danger me-2"></i> <%= destination.state %>, <%= destination.country %>
+      </p>
+    </div>
+  </div>
+
+  <!-- Action Row (Owner Edit/Delete) -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="small text-muted">
+      Contributed by <strong class="text-dark"><%= destination.createdBy ? destination.createdBy.username : (destination.createdByName || 'Anonymous Traveler') %></strong>
+      &bull; Listed on <%= destination.createdAt ? destination.createdAt.toLocaleDateString() : 'Recent' %>
+    </div>
+    <% if(currentUser && destination.createdBy && destination.createdBy._id.equals(currentUser._id)) { %>
+      <div class="d-flex gap-2">
+        <a href="/destinations/<%= destination._id %>/edit" class="btn btn-sm btn-outline-secondary">
+          <i class="fa-solid fa-pen-to-square me-1"></i> Edit Details
+        </a>
+        <form action="/destinations/<%= destination._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure you want to delete this destination?');">
+          <button type="submit" class="btn btn-sm btn-outline-danger">
+            <i class="fa-solid fa-trash me-1"></i> Delete
+          </button>
+        </form>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Aggregated Practical Travel Metrics Bar -->
+  <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+    <h5 class="fw-bold mb-3"><i class="fa-solid fa-clipboard-check text-success me-2"></i> Practical Travel Insights (Community Consensus)</h5>
+    <div class="row g-3">
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="metric-badge-box">
+          <i class="fa-solid fa-square-parking text-primary"></i>
+          <div class="small text-muted fw-semibold">Parking</div>
+          <div class="fw-bold text-dark mt-1"><%= summary.topParking %></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="metric-badge-box">
+          <i class="fa-solid fa-utensils text-warning"></i>
+          <div class="small text-muted fw-semibold">Food Options</div>
+          <div class="fw-bold text-dark mt-1"><%= summary.topFood %></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="metric-badge-box">
+          <i class="fa-solid fa-users text-info"></i>
+          <div class="small text-muted fw-semibold">Crowd Level</div>
+          <div class="fw-bold text-dark mt-1"><%= summary.topCrowd %></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="metric-badge-box">
+          <i class="fa-solid fa-cloud-sun text-success"></i>
+          <div class="small text-muted fw-semibold">Best Season</div>
+          <div class="fw-bold text-dark mt-1"><%= summary.bestSeason %></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="metric-badge-box">
+          <i class="fa-solid fa-clock text-purple"></i>
+          <div class="small text-muted fw-semibold">Time Required</div>
+          <div class="fw-bold text-dark mt-1"><%= summary.popularTimeSpent %></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="metric-badge-box">
+          <i class="fa-solid fa-child text-danger"></i>
+          <div class="small text-muted fw-semibold">Family Friendly</div>
+          <div class="fw-bold text-dark mt-1"><%= summary.familyFriendlyPct %>% Consensus</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content & Map Grid -->
+  <div class="row g-4 mb-5">
+    <!-- Left Column: Description & Reviews -->
+    <div class="col-lg-7">
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+        <h4 class="fw-bold mb-3">About <%= destination.title %></h4>
+        <p class="text-secondary leading-relaxed fs-6 mb-0" style="white-space: pre-line;">
+          <%= destination.description %>
+        </p>
+      </div>
+
+      <!-- Write Review Card / Form -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white" id="write-review">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-pen-to-square text-primary me-2"></i> Contribute Your Travel Experience</h4>
+        
+        <% if(currentUser) { %>
+          <form
+            action="/destinations/<%= destination._id %>/reviews"
+            method="POST"
+            enctype="multipart/form-data"
+            class="needs-validation"
+            novalidate
+          >
+            <!-- Rating Star Selector -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Your Rating <span class="text-danger">*</span></label>
+              <div class="star-rating-input">
+                <input type="radio" id="rate5" name="review[rating]" value="5" required />
+                <label for="rate5" title="5 stars"><i class="fa-solid fa-star"></i></label>
+
+                <input type="radio" id="rate4" name="review[rating]" value="4" />
+                <label for="rate4" title="4 stars"><i class="fa-solid fa-star"></i></label>
+
+                <input type="radio" id="rate3" name="review[rating]" value="3" />
+                <label for="rate3" title="3 stars"><i class="fa-solid fa-star"></i></label>
+
+                <input type="radio" id="rate2" name="review[rating]" value="2" />
+                <label for="rate2" title="2 stars"><i class="fa-solid fa-star"></i></label>
+
+                <input type="radio" id="rate1" name="review[rating]" value="1" />
+                <label for="rate1" title="1 star"><i class="fa-solid fa-star"></i></label>
+              </div>
+            </div>
+
+            <!-- Practical Details Selectors -->
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Visited Season <span class="text-danger">*</span></label>
+                <select name="review[visitedSeason]" class="form-select" required>
+                  <option value="Summer">Summer</option>
+                  <option value="Monsoon">Monsoon</option>
+                  <option value="Autumn">Autumn</option>
+                  <option value="Winter">Winter</option>
+                  <option value="Spring">Spring</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Travel Mode <span class="text-danger">*</span></label>
+                <select name="review[travelMode]" class="form-select" required>
+                  <option value="Car">Car</option>
+                  <option value="Bike">Bike</option>
+                  <option value="Public Transport">Public Transport</option>
+                  <option value="Trekking/Walking">Trekking / Walking</option>
+                  <option value="Tour Bus">Tour Bus</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Parking Availability <span class="text-danger">*</span></label>
+                <select name="review[parking]" class="form-select" required>
+                  <option value="Available">Available</option>
+                  <option value="Limited">Limited</option>
+                  <option value="Paid">Paid</option>
+                  <option value="Not Available">Not Available</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Food Availability <span class="text-danger">*</span></label>
+                <select name="review[foodAvailability]" class="form-select" required>
+                  <option value="Available">Available Onsite</option>
+                  <option value="Nearby">Nearby</option>
+                  <option value="Pack Your Own">Pack Your Own</option>
+                  <option value="None">None</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Crowd Level <span class="text-danger">*</span></label>
+                <select name="review[crowdLevel]" class="form-select" required>
+                  <option value="Low">Low (Peaceful)</option>
+                  <option value="Moderate" selected>Moderate</option>
+                  <option value="High">High</option>
+                  <option value="Extreme">Extreme</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Time Required <span class="text-danger">*</span></label>
+                <select name="review[timeSpent]" class="form-select" required>
+                  <option value="1-2 Hours">1-2 Hours</option>
+                  <option value="Half Day" selected>Half Day</option>
+                  <option value="Full Day">Full Day</option>
+                  <option value="Multi-Day">Multi-Day</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Family Friendly? <span class="text-danger">*</span></label>
+                <select name="review[familyFriendly]" class="form-select" required>
+                  <option value="Yes" selected>Yes</option>
+                  <option value="Partially">Partially</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Review Text -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Detailed Review <span class="text-danger">*</span></label>
+              <textarea
+                name="review[review]"
+                rows="4"
+                class="form-control"
+                placeholder="Share your overall experience, road condition, entry fee, best spots to take photos..."
+                required
+              ></textarea>
+            </div>
+
+            <!-- Travel Tips -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Pro Travel Tips (Optional)</label>
+              <input
+                type="text"
+                name="review[travelTips]"
+                class="form-control"
+                placeholder="e.g. Arrive before 8 AM to avoid long parking queues, bring extra water..."
+              />
+            </div>
+
+            <!-- Upload Photos -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Upload Review Photos (Optional, Max 5)</label>
+              <input type="file" name="reviewImages" multiple class="form-control" accept="image/*" />
+            </div>
+
+            <button type="submit" class="btn btn-ta-emerald btn-lg w-100">
+              <i class="fa-solid fa-paper-plane me-2"></i> Submit Experience
+            </button>
+          </form>
+        <% } else { %>
+          <div class="text-center py-4 bg-light rounded-3 border">
+            <i class="fa-solid fa-user-lock fs-2 text-muted mb-2"></i>
+            <h5 class="fw-bold">Sign in to leave a review</h5>
+            <p class="text-muted small mb-3">Help fellow travelers by sharing your firsthand experience!</p>
+            <a href="/login" class="btn btn-ta-primary me-2">Log In</a>
+            <a href="/signup" class="btn btn-ta-secondary">Sign Up</a>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Community Reviews List -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <h4 class="fw-bold mb-4">
+          <i class="fa-solid fa-comments text-primary me-2"></i> Community Reviews (<%= destination.reviews.length %>)
+        </h4>
+
+        <% if(destination.reviews && destination.reviews.length > 0) { %>
+          <div class="d-flex flex-column gap-4">
+            <% destination.reviews.forEach(review => { %>
+              <div class="border-bottom pb-4">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <div class="d-flex align-items-center gap-3">
+                    <img
+                      src="<%= review.author?.profileImage?.url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80' %>"
+                      alt="Author"
+                      class="rounded-circle"
+                      style="width: 42px; height: 42px; object-fit: cover; border: 2px solid #e2e8f0;"
+                    />
+                    <div>
+                      <h6 class="fw-bold mb-0">
+                        <%= review.author ? review.author.username : (review.authorName || 'Anonymous Traveler') %>
+                      </h6>
+                      <small class="text-muted">Visited in <%= review.visitedSeason %> &bull; <%= review.createdAt ? review.createdAt.toLocaleDateString() : 'Recently' %></small>
+                    </div>
+                  </div>
+
+                  <div class="text-warning fs-6">
+                    <% for(let i = 1; i <= 5; i++) { %>
+                      <i class="fa-<%= i <= review.rating ? 'solid' : 'regular' %> fa-star"></i>
+                    <% } %>
+                  </div>
+                </div>
+
+                <!-- Structured Badges -->
+                <div class="d-flex flex-wrap gap-2 my-2">
+                  <span class="badge bg-light text-dark border">🚗 Mode: <%= review.travelMode %></span>
+                  <span class="badge bg-light text-dark border">🅿️ Parking: <%= review.parking %></span>
+                  <span class="badge bg-light text-dark border">🍽️ Food: <%= review.foodAvailability %></span>
+                  <span class="badge bg-light text-dark border">👥 Crowd: <%= review.crowdLevel %></span>
+                  <span class="badge bg-light text-dark border">⏱️ Time: <%= review.timeSpent %></span>
+                </div>
+
+                <p class="text-secondary mb-2"><%= review.review %></p>
+
+                <% if(review.travelTips) { %>
+                  <div class="p-3 bg-light rounded-3 border-start border-4 border-warning my-2 small">
+                    <strong class="text-dark"><i class="fa-solid fa-lightbulb text-warning me-1"></i> Pro Tip:</strong> <%= review.travelTips %>
+                  </div>
+                <% } %>
+
+                <!-- Review Photos Gallery -->
+                <% if(review.images && review.images.length > 0) { %>
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <% review.images.forEach(img => { %>
+                      <a href="<%= img.url %>" target="_blank">
+                        <img
+                          src="<%= img.url %>"
+                          alt="Review photo"
+                          class="rounded-3 shadow-sm"
+                          style="width: 90px; height: 90px; object-fit: cover;"
+                        />
+                      </a>
+                    <% }) %>
+                  </div>
+                <% } %>
+
+                <!-- Delete Review button for review author -->
+                <% if(currentUser && review.author && review.author._id.equals(currentUser._id)) { %>
+                  <form
+                    action="/destinations/<%= destination._id %>/reviews/<%= review._id %>?_method=DELETE"
+                    method="POST"
+                    class="mt-3"
+                    onsubmit="return confirm('Delete your review?');"
+                  >
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                      <i class="fa-solid fa-trash me-1"></i> Delete Review
+                    </button>
+                  </form>
+                <% } %>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="text-center py-4 text-muted">
+            <p class="mb-0">No community reviews yet. Be the first to share your experience!</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Right Column: Interactive Map & Quick Info -->
+    <div class="col-lg-5">
+      <!-- Leaflet Map Box -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+        <h5 class="fw-bold mb-3"><i class="fa-solid fa-map-location-dot text-primary me-2"></i> Location & Map</h5>
+        <div
+          id="map"
+          data-lat="<%= destination.coordinates.latitude %>"
+          data-lng="<%= destination.coordinates.longitude %>"
+          data-title="<%= destination.title %>"
+          data-state="<%= destination.state %>"
+          data-country="<%= destination.country %>"
+        ></div>
+        <div class="mt-3 text-muted small">
+          <i class="fa-solid fa-compass me-1"></i> Coordinates: <%= destination.coordinates.latitude.toFixed(4) %>, <%= destination.coordinates.longitude.toFixed(4) %>
+        </div>
+      </div>
+
+      <!-- Single Page Knowledge Guarantee -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-dark text-white">
+        <h5 class="fw-bold mb-2 text-white"><i class="fa-solid fa-shield-halved text-success me-2"></i> One Page Per Destination</h5>
+        <p class="small text-slate-300 mb-0">
+          TravelAtlas keeps information clean by enforcing a single canonical page per destination. All reviews, photos, parking tips, and ratings are aggregated here so travelers never need to check multiple links.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

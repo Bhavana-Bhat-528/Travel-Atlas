@@ -1,0 +1,314 @@
+<% layout('layouts/boilerplate') %>
+
+<!-- 1. HERO SECTION -->
+<section class="ta-hero">
+  <div class="container py-5">
+    <div class="row align-items-center justify-content-between min-vh-75">
+      <div class="col-lg-8 mx-auto text-center text-lg-start">
+        <div class="ta-hero-badge mb-3">
+          <i class="fa-solid fa-compass text-info me-2"></i> TravelAtlas Platform
+        </div>
+        
+        <h1 class="ta-hero-title">
+          TravelAtlas
+        </h1>
+        <h2 class="display-5 fw-bold text-white mb-3">
+          Discover destinations through <span>real travel experiences.</span>
+        </h2>
+        
+        <p class="ta-hero-subtitle fs-5 text-light opacity-90 mb-4">
+          TravelAtlas helps travelers discover sightseeing destinations through community-driven knowledge instead of scattered, unreliable information across blogs and forums.
+        </p>
+
+        <!-- Primary CTA Buttons -->
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start gap-3 mb-4">
+          <a href="/destinations" class="btn btn-ta-primary btn-lg shadow-lg">
+            <i class="fa-solid fa-compass me-2"></i> Explore Destinations
+          </a>
+          <% if(!currentUser) { %>
+            <a href="/signup" class="btn btn-ta-secondary btn-lg shadow-sm">
+              <i class="fa-solid fa-user-plus me-2"></i> Join the Community
+            </a>
+          <% } else { %>
+            <a href="/destinations/new" class="btn btn-ta-emerald btn-lg shadow-sm">
+              <i class="fa-solid fa-plus me-2"></i> Contribute Destination
+            </a>
+          <% } %>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-center justify-content-lg-start gap-4 text-light small opacity-75 pt-2">
+          <span><i class="fa-solid fa-circle-check text-success me-1"></i> Single Canonical Pages</span>
+          <span><i class="fa-solid fa-circle-check text-success me-1"></i> Structured Tips</span>
+          <span><i class="fa-solid fa-circle-check text-success me-1"></i> Authentic Reviews</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. ABOUT SECTION -->
+<section id="about" class="py-5 bg-white">
+  <div class="container py-4">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="pe-lg-3">
+          <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold mb-2">Why TravelAtlas Exists</span>
+          <h2 class="display-6 fw-bold mt-2 mb-4">
+            Solving the Frustration of Scattered Travel Information
+          </h2>
+          <p class="text-muted leading-relaxed mb-3 fs-6">
+            Planning a trip today requires opening tens of tabs across Google Maps, travel blogs, Reddit threads, YouTube vlogs, and social media reels. Yet simple, critical questions remain unanswered:
+          </p>
+
+          <div class="row g-3 my-3">
+            <div class="col-sm-6">
+              <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light border border-light-subtle shadow-sm">
+                <div class="ta-icon-wrapper icon-blue mb-0 fs-5">
+                  <i class="fa-solid fa-square-parking"></i>
+                </div>
+                <span class="fw-semibold text-dark small">Is parking available?</span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light border border-light-subtle shadow-sm">
+                <div class="ta-icon-wrapper icon-amber mb-0 fs-5">
+                  <i class="fa-solid fa-users"></i>
+                </div>
+                <span class="fw-semibold text-dark small">Is it overly crowded?</span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light border border-light-subtle shadow-sm">
+                <div class="ta-icon-wrapper icon-emerald mb-0 fs-5">
+                  <i class="fa-solid fa-cloud-sun"></i>
+                </div>
+                <span class="fw-semibold text-dark small">Which season is best?</span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light border border-light-subtle shadow-sm">
+                <div class="ta-icon-wrapper icon-purple mb-0 fs-5">
+                  <i class="fa-solid fa-utensils"></i>
+                </div>
+                <span class="fw-semibold text-dark small">Are food options nearby?</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-muted mt-4">
+            <strong>TravelAtlas is a community-driven travel knowledge platform</strong> — not a booking platform. Instead, every destination on Earth has <em>one single canonical page</em>, where real travelers organize practical travel experiences, parking availability, crowd metrics, and road conditions in one place.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="position-relative">
+          <img
+            src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80"
+            alt="Scenic destination overview"
+            class="img-fluid rounded-4 shadow-lg border border-light"
+          />
+          <div class="position-absolute bottom-0 start-0 m-4 p-3 bg-white rounded-4 shadow-lg border border-light max-w-sm">
+            <div class="d-flex align-items-center gap-3">
+              <div class="ta-icon-wrapper icon-emerald mb-0">
+                <i class="fa-solid fa-shield"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-0">Structured Knowledge</h6>
+                <small class="text-muted">Single canonical destination pages with community consensus.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. HOW IT WORKS SECTION -->
+<section id="how-it-works" class="py-5 bg-light">
+  <div class="container py-4">
+    <div class="text-center max-w-2xl mx-auto mb-5">
+      <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold mb-2">Simple Process</span>
+      <h2 class="fw-bold display-6">How It Works</h2>
+      <p class="text-muted fs-6">Four modern steps to empower your travel decisions and help fellow explorers.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="ta-card h-100 p-4 text-center">
+          <div class="ta-icon-wrapper icon-blue mx-auto">
+            <i class="fa-solid fa-magnifying-glass fs-3"></i>
+          </div>
+          <h5 class="fw-bold mb-2">🔍 Discover</h5>
+          <p class="small text-muted mb-0">Search destinations by name or category across state and country regions.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="ta-card h-100 p-4 text-center">
+          <div class="ta-icon-wrapper icon-emerald mx-auto">
+            <i class="fa-solid fa-book-open-reader fs-3"></i>
+          </div>
+          <h5 class="fw-bold mb-2">📖 Explore</h5>
+          <p class="small text-muted mb-0">Read community reviews, photos, ratings, parking details, and travel tips.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="ta-card h-100 p-4 text-center">
+          <div class="ta-icon-wrapper icon-amber mx-auto">
+            <i class="fa-solid fa-pen-to-square fs-3"></i>
+          </div>
+          <h5 class="fw-bold mb-2">✍️ Contribute</h5>
+          <p class="small text-muted mb-0">Share your own travel experiences, photos, and crowd level recommendations.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="ta-card h-100 p-4 text-center">
+          <div class="ta-icon-wrapper icon-purple mx-auto">
+            <i class="fa-solid fa-earth-americas fs-3"></i>
+          </div>
+          <h5 class="fw-bold mb-2">🌍 Help Travelers</h5>
+          <p class="small text-muted mb-0">Your contributions help future travelers make better, stress-free travel decisions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. WHY CHOOSE TRAVELATLAS -->
+<section id="why-choose" class="py-5 bg-white">
+  <div class="container py-4">
+    <div class="text-center max-w-2xl mx-auto mb-5">
+      <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold mb-2">Platform Features</span>
+      <h2 class="fw-bold display-6">Why Choose TravelAtlas</h2>
+      <p class="text-muted fs-6">Designed from the ground up to eliminate travel ambiguity through real crowdsourced facts.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4">
+        <div class="ta-card p-4 h-100">
+          <div class="ta-icon-wrapper icon-blue">
+            <i class="fa-solid fa-comments fs-4"></i>
+          </div>
+          <h5 class="fw-bold">Community Driven Reviews</h5>
+          <p class="text-muted small mb-0">Authentic insights contributed by travelers who have recently visited the sightseeing destination.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="ta-card p-4 h-100">
+          <div class="ta-icon-wrapper icon-emerald">
+            <i class="fa-solid fa-map-location-dot fs-4"></i>
+          </div>
+          <h5 class="fw-bold">Interactive Maps</h5>
+          <p class="text-muted small mb-0">Integrated Leaflet maps powered by Geoapify geocoding for exact coordinates and route planning.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="ta-card p-4 h-100">
+          <div class="ta-icon-wrapper icon-amber">
+            <i class="fa-solid fa-list-check fs-4"></i>
+          </div>
+          <h5 class="fw-bold">Structured Travel Tips</h5>
+          <p class="text-muted small mb-0">Get clear data on parking availability, best seasons to visit, crowd levels, time spent, and food options.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="ta-card p-4 h-100">
+          <div class="ta-icon-wrapper icon-purple">
+            <i class="fa-solid fa-images fs-4"></i>
+          </div>
+          <h5 class="fw-bold">Beautiful Destination Gallery</h5>
+          <p class="text-muted small mb-0">High-resolution cover photos and user-contributed galleries showcasing real scenery.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="ta-card p-4 h-100">
+          <div class="ta-icon-wrapper icon-blue">
+            <i class="fa-solid fa-filter fs-4"></i>
+          </div>
+          <h5 class="fw-bold">Search & Category Filters</h5>
+          <p class="text-muted small mb-0">Filter destinations by Waterfalls, Mountains, Beaches, Temples, Camping, Wildlife, and more.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="ta-card p-4 h-100">
+          <div class="ta-icon-wrapper icon-emerald">
+            <i class="fa-solid fa-user-shield fs-4"></i>
+          </div>
+          <h5 class="fw-bold">Secure User Profiles</h5>
+          <p class="text-muted small mb-0">Track your personal contributions while ensuring community knowledge stays preserved for everyone.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. COMMUNITY STATISTICS -->
+<section class="stats-section">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-number counter-val" data-target="<%= stats.destinations %>">0</div>
+          <div class="stat-label">Destinations</div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-number counter-val" data-target="<%= stats.reviews %>">0</div>
+          <div class="stat-label">Community Reviews</div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-number counter-val" data-target="<%= stats.travelers %>">0</div>
+          <div class="stat-label">Registered Travelers</div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-number counter-val" data-target="<%= stats.photos %>">0</div>
+          <div class="stat-label">Photos Shared</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. FINAL CALL TO ACTION -->
+<section class="py-5 bg-white">
+  <div class="container py-4">
+    <div class="p-5 rounded-4 bg-dark text-white text-center position-relative overflow-hidden shadow-lg border border-secondary">
+      <div class="position-relative z-1 max-w-2xl mx-auto">
+        <h2 class="display-6 fw-bold mb-3 text-white">
+          Your next adventure can help thousands of future travelers.
+        </h2>
+        <p class="text-slate-300 mb-4 fs-5">
+          Join TravelAtlas today. Explore detailed travel guides or contribute your firsthand experience to make travel decisions better for everyone.
+        </p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+          <% if(!currentUser) { %>
+            <a href="/signup" class="btn btn-ta-primary btn-lg px-4 shadow">
+              <i class="fa-solid fa-user-plus me-2"></i> Join Now
+            </a>
+          <% } %>
+          <a href="/destinations" class="btn btn-ta-secondary btn-lg px-4 shadow">
+            <i class="fa-solid fa-compass me-2"></i> Explore Destinations
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

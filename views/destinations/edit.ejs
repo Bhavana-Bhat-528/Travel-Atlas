@@ -1,0 +1,86 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
+        <h2 class="fw-bold mb-2"><i class="fa-solid fa-pen-to-square text-primary me-2"></i> Edit Destination</h2>
+        <p class="text-muted mb-4">Update information for <%= destination.title %></p>
+
+        <form action="/destinations/<%= destination._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Destination Name / Title <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              name="destination[title]"
+              class="form-control form-control-lg"
+              value="<%= destination.title %>"
+              required
+            />
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">State / Region <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                name="destination[state]"
+                class="form-control"
+                value="<%= destination.state %>"
+                required
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Country <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                name="destination[country]"
+                class="form-control"
+                value="<%= destination.country %>"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
+            <select name="destination[category]" class="form-select" required>
+              <% categories.forEach(cat => { %>
+                <option value="<%= cat %>" <%= destination.category === cat ? 'selected' : '' %>><%= cat %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Description <span class="text-danger">*</span></label>
+            <textarea
+              name="destination[description]"
+              rows="5"
+              class="form-control"
+              required
+            ><%= destination.description %></textarea>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Replace Cover Image (Optional)</label>
+            <input type="file" name="coverImage" class="form-control" accept="image/*" />
+            <% if(destination.coverImage?.url) { %>
+              <div class="mt-2">
+                <small class="text-muted d-block mb-1">Current cover photo:</small>
+                <img src="<%= destination.coverImage.url %>" alt="Cover" class="rounded-3 shadow-sm" style="height: 90px; object-fit: cover;" />
+              </div>
+            <% } %>
+          </div>
+
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-ta-primary btn-lg px-4">
+              <i class="fa-solid fa-floppy-disk me-2"></i> Update Details
+            </button>
+            <a href="/destinations/<%= destination._id %>" class="btn btn-outline-secondary btn-lg px-4">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
