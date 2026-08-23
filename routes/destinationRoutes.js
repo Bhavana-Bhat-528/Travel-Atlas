@@ -8,6 +8,12 @@ const { upload } = require('../config/cloudinary');
 // Root Landing Page (`/`)
 router.get('/', destinationController.landingPage);
 
+// Platform Static Pages
+router.get('/privacy', destinationController.privacyPolicy);
+router.get('/terms', destinationController.termsConditions);
+router.get('/community-guidelines', destinationController.communityGuidelines);
+
+
 // Explore Destinations (`/destinations`) & Create Destination (`POST /destinations`)
 router
   .route('/destinations')

@@ -29,3 +29,33 @@
     </div>
   <% } %>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const flashAlerts = document.querySelectorAll('.flash-container .alert');
+    flashAlerts.forEach(function (alert) {
+      // Automatic dismissal timer after 10 seconds (10000ms)
+      const dismissTimer = setTimeout(function () {
+        if (alert && document.body.contains(alert)) {
+          if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
+            const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+            if (bsAlert) bsAlert.close();
+          } else {
+            alert.classList.remove('show');
+            setTimeout(function () {
+              if (alert && alert.parentNode) alert.parentNode.removeChild(alert);
+            }, 150);
+          }
+        }
+      }, 10000);
+
+      // Clear timer if user manually clicks the dismiss button before 10s
+      const closeBtn = alert.querySelector('.btn-close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+          clearTimeout(dismissTimer);
+        });
+      }
+    });
+  });
+</script>

@@ -346,3 +346,19 @@ module.exports.deleteDestination = catchAsync(async (req, res) => {
   req.flash('success', 'Successfully deleted destination!');
   res.redirect('/destinations');
 });
+
+// 9. Privacy Policy Page
+module.exports.privacyPolicy = (req, res) => {
+  res.render('pages/privacy', { title: 'Privacy Policy - TravelAtlas' });
+};
+
+// 10. Terms & Conditions Page
+module.exports.termsConditions = (req, res) => {
+  res.render('pages/terms', { title: 'Terms & Conditions - TravelAtlas' });
+};
+
+// 11. Community Guidelines Page
+module.exports.communityGuidelines = (req, res) => {
+  res.render('pages/community', { title: 'Community Guidelines - TravelAtlas' });
+};
+

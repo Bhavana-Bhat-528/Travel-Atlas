@@ -52,14 +52,18 @@ const seedDB = async () => {
     const registeredUser = await User.register(demoUser, 'Password123!');
     console.log(`[Seed Script] Created seed user: ${registeredUser.username} (Password123!)`);
 
-    // Insert destinations and sample reviews
-    for (const data of seedDestinations) {
+    // Insert destinations and sample reviews (distributed between jane_doe and traveler_sam)
+    for (let i = 0; i < seedDestinations.length; i++) {
+      const data = seedDestinations[i];
       const { sampleReviews, ...destInfo } = data;
+
+      // Distribute destination creator between jane_doe and traveler_sam
+      const destCreator = i % 2 === 0 ? registeredJane : registeredUser;
 
       const destination = new Destination({
         ...destInfo,
-        createdBy: registeredUser._id,
-        createdByName: registeredUser.username,
+        createdBy: destCreator._id,
+        createdByName: destCreator.username,
         reviews: []
       });
 
@@ -68,12 +72,16 @@ const seedDB = async () => {
       let totalRating = 0;
 
       if (sampleReviews && sampleReviews.length > 0) {
-        for (const revData of sampleReviews) {
+        for (let rIdx = 0; rIdx < sampleReviews.length; rIdx++) {
+          const revData = sampleReviews[rIdx];
+          // Alternate review author between jane_doe and traveler_sam
+          const reviewAuthor = (i + rIdx) % 2 === 0 ? registeredJane : registeredUser;
+
           const review = new Review({
             ...revData,
             destination: destination._id,
-            author: registeredUser._id,
-            authorName: registeredUser.username
+            author: reviewAuthor._id,
+            authorName: reviewAuthor.username
           });
 
           await review.save();
@@ -87,7 +95,7 @@ const seedDB = async () => {
         await destination.save();
       }
 
-      console.log(`[Seed Script] Seeded: ${destination.title} (${destination.category}) with ${destination.reviews.length} reviews`);
+      console.log(`[Seed Script] Seeded: ${destination.title} (${destination.category}) by ${destCreator.username} with ${destination.reviews.length} reviews`);
     }
 
     console.log('\n✅ Database Seeding Completed Successfully!');
