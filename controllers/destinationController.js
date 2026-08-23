@@ -5,6 +5,7 @@ const User = require('../models/User');
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const { geocodeDestination } = require('../utils/geocoder');
+const { getDestinationWeather } = require('../utils/weather');
 
 // 1. Landing Page (Root `/`)
 module.exports.landingPage = catchAsync(async (req, res) => {
@@ -268,11 +269,18 @@ module.exports.showDestination = catchAsync(async (req, res) => {
     familyFriendlyPct: reviews.length > 0 ? Math.round((metrics.familyFriendlyYes / reviews.length) * 100) : 0
   };
 
+  // Fetch real-time weather information based on destination coordinates
+  const weather = await getDestinationWeather(
+    destination.coordinates?.latitude,
+    destination.coordinates?.longitude
+  );
+
   res.render('destinations/show', {
     title: `${destination.title} (${destination.state}, ${destination.country}) - TravelAtlas`,
     destination,
     metrics,
-    summary: aggregatedSummary
+    summary: aggregatedSummary,
+    weather
   });
 });
 
