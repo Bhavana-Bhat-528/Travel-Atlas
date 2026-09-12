@@ -2,7 +2,7 @@
 
 > **A Community-Driven Travel Knowledge Platform** for discovering destinations, exploring practical travel insights, and sharing experiences through structured community reviews.
 
-**[Live Demo](https://travelatlas.onrender.com)**
+**[Live Demo](https://travel-atlas.onrender.com)**
 
 ---
 
@@ -226,7 +226,7 @@ TravelAtlas is deployed as a Node.js web service on **Render** and uses **MongoD
 The application is configured to use environment variables for production services and credentials.
 
 **Live Demo:**  
-https://travelatlas.onrender.com
+https://travel-atlas.onrender.com
 
 ---
 
