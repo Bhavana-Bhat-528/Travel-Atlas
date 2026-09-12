@@ -38,7 +38,7 @@ Browse destinations through a centralized catalog with destination categories, r
 
 Each destination has a single dedicated page containing its core information, rating, category, location, and community-driven travel insights.
 
-![Destination Details](screenshots/destination-details-top.png)
+![Destination Details](screenshots/destination-details.png)
 
 ---
 
@@ -46,7 +46,7 @@ Each destination has a single dedicated page containing its core information, ra
 
 The destination page brings together practical travel information, an interactive map, live weather information, and a form for users to contribute their own travel experiences.
 
-![Community Insights and Weather](screenshots/destination-details-community.png)
+![Community Insights and Weather](screenshots/destination-contribution.png)
 
 ---
 
@@ -54,7 +54,7 @@ The destination page brings together practical travel information, an interactiv
 
 Users can manage their profiles and view destinations they have added and reviews they have written.
 
-![User Profile](screenshots/user-profile.png)
+![User Profile](screenshots/profile.png)
 
 ---
 
