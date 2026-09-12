@@ -1,6 +1,26 @@
-/* Leaflet Map Initialization for Single & Explore Pages */
+/* Leaflet Map Initialization with Geoapify Map Tiles */
 
 document.addEventListener('DOMContentLoaded', () => {
+  const getGeoapifyKey = (element) => {
+    return (
+      (element && element.getAttribute('data-geoapify-key')) ||
+      (typeof window !== 'undefined' && window.GEOAPIFY_API_KEY) ||
+      ''
+    );
+  };
+
+  const getGeoapifyTileLayer = (apiKey) => {
+    const isRetina = L.Browser.retina;
+    const tileUrl = `https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}${isRetina ? '@2x' : ''}.png?apiKey=${apiKey}`;
+
+    return L.tileLayer(tileUrl, {
+      attribution:
+        'Powered by <a href="https://www.geoapify.com/" target="_blank" rel="noopener noreferrer">Geoapify</a> | <a href="https://openmaptiles.org/" target="_blank" rel="noopener noreferrer">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap</a> contributors',
+      maxZoom: 20,
+      id: 'osm-bright'
+    });
+  };
+
   // 1. Single Destination Map Handler
   const mapElement = document.getElementById('map');
   if (mapElement) {
@@ -9,13 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const title = mapElement.getAttribute('data-title') || 'Destination Location';
     const state = mapElement.getAttribute('data-state') || '';
     const country = mapElement.getAttribute('data-country') || '';
+    const apiKey = getGeoapifyKey(mapElement);
 
     const map = L.map('map').setView([lat, lng], 11);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
+    getGeoapifyTileLayer(apiKey).addTo(map);
 
     const customIcon = L.divIcon({
       className: 'custom-leaflet-marker',
@@ -37,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const clusterMapElement = document.getElementById('cluster-map');
   if (clusterMapElement) {
     const rawData = clusterMapElement.getAttribute('data-destinations');
+    const apiKey = getGeoapifyKey(clusterMapElement);
     let destinations = [];
     try {
       destinations = JSON.parse(rawData);
@@ -47,10 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Default center (India/Global center)
     const exploreMap = L.map('cluster-map').setView([20.5937, 78.9629], 5);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(exploreMap);
+    getGeoapifyTileLayer(apiKey).addTo(exploreMap);
 
     const bounds = [];
 

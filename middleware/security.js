@@ -41,6 +41,8 @@ const configureSecurity = (app) => {
   const connectSrcUrls = [
     'https://*.tile.openstreetmap.org',
     'https://api.geoapify.com',
+    'https://maps.geoapify.com',
+    'https://*.geoapify.com',
     'https://res.cloudinary.com'
   ];
   const fontSrcUrls = [
@@ -53,8 +55,21 @@ const configureSecurity = (app) => {
     '\'self\'',
     'blob:',
     'data:',
+    'https://maps.geoapify.com',
+    'https://*.geoapify.com',
+    'https://api.geoapify.com',
     'https://res.cloudinary.com',
     'https://images.unsplash.com',
+    'https://i.pinimg.com',
+    'https://*.pinimg.com',
+    'https://encrypted-tbn0.gstatic.com',
+    'https://*.gstatic.com',
+    'https://www.zingbus.com',
+    'https://*.zingbus.com',
+    'https://images.squarespace-cdn.com',
+    'https://*.squarespace-cdn.com',
+    'https://upload.wikimedia.org',
+    'https://*.wikimedia.org',
     'https://*.tile.openstreetmap.org',
     'https://unpkg.com',
     'https://via.placeholder.com'

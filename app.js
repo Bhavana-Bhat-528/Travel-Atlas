@@ -25,6 +25,9 @@ const reviewRoutes = require('./routes/reviewRoutes');
 
 const app = express();
 
+// Enable trust proxy for Render / reverse proxies (needed for rate limiting & secure cookies)
+app.set('trust proxy', 1);
+
 // Connect MongoDB Database
 connectDB();
 
@@ -64,7 +67,7 @@ const sessionConfig = {
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    // secure: true, // Uncomment in production with HTTPS
+    secure: process.env.NODE_ENV === 'production',
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7 Days
     maxAge: 1000 * 60 * 60 * 24 * 7
   }
@@ -86,6 +89,7 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.info = req.flash('info');
+  res.locals.geoapifyApiKey = process.env.GEOAPIFY_API_KEY || '';
   next();
 });
 

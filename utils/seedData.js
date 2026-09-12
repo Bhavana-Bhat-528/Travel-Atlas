@@ -8,7 +8,7 @@ const seedDestinations = [
       'Dudhsagar Waterfalls is a majestic four-tiered waterfall located on the Mandovi River in Goa. Surrounded by lush Bhagwan Mahaveer Sanctuary forests, it cascades down 310 meters and resembles a flowing sea of milk. It is one of India\'s tallest and most spectacular natural waterfalls.',
     coordinates: { latitude: 15.3144, longitude: 74.3143 },
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80',
+      url: 'https://i.pinimg.com/736x/cb/b0/93/cbb0932c7e9829997c2ce238b66305cf.jpg',
       filename: 'seed-dudhsagar'
     },
     sampleReviews: [
@@ -49,7 +49,7 @@ const seedDestinations = [
       'Munnar is a tranquil hill station in the Western Ghats mountain range of Kerala, renowned for its rolling tea plantations, mist-covered hills, crisp mountain air, and exotic flora like the Neelakurinji flower.',
     coordinates: { latitude: 10.0889, longitude: 77.0595 },
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=1200&q=80',
+      url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJkoJuXGOnrhKzNkV7imIIftGJebxoTstjH6o-qwdeLf1lgOcdFvzD2PKd&s=10',
       filename: 'seed-munnar'
     },
     sampleReviews: [
@@ -131,7 +131,7 @@ const seedDestinations = [
       'Pangong Tso is an endorheic high-altitude lake situated in the Himalayas at a height of 4,225 meters. Famous for changing colors from azure blue to deep emerald green throughout the day depending on sun position.',
     coordinates: { latitude: 33.7595, longitude: 78.6674 },
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80',
+      url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThIwVbbsRdBDPtoCGKMZOqZegVVLHwjYmhGElPmNwHn9oqcPqY1-DzlQU&s=10',
       filename: 'seed-pangong'
     },
     sampleReviews: [
@@ -327,7 +327,7 @@ const seedDestinations = [
       'Kodagu (Coorg) is an emerald-green hill district in Karnataka celebrated for coffee plantations, spice estates, misty valleys, and outdoor camping under starlit canopy forests.',
     coordinates: { latitude: 12.3375, longitude: 75.8069 },
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+      url: 'https://www.zingbus.com/blog/wp-content/uploads/2026/06/4487.jpg',
       filename: 'seed-coorg'
     },
     sampleReviews: [
@@ -355,7 +355,7 @@ const seedDestinations = [
       'Varanasi Ghats are riverfront steps leading down to the sacred Ganges River. Dating back centuries, these 88 ghats form the spiritual heart of Kashi, hosting daily Ganga Aarti rituals, wooden rowboats, and timeless heritage.',
     coordinates: { latitude: 25.3176, longitude: 83.0104 },
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80',
+      url: 'https://images.squarespace-cdn.com/content/v1/5e95d9b13e6b2f7f177b574b/1587739848976-248791SKDDTF5WU0WA54/1.+Along+the+ghats.jpg',
       filename: 'seed-varanasi'
     },
     sampleReviews: [
@@ -411,7 +411,7 @@ const seedDestinations = [
       'Formerly Prince of Wales Museum, this premier art, archaeology, and natural history museum in Fort, Mumbai is housed in a magnificent Grade I heritage building combining Indo-Saracenic and Maratha architecture.',
     coordinates: { latitude: 18.9269, longitude: 72.8327 },
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&w=1200&q=80',
+      url: 'https://upload.wikimedia.org/wikipedia/commons/7/79/Chhatrapati_Shivaji_Maharaj_Vastu_Sangrahalaya.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original',
       filename: 'seed-mumbaimuseum'
     },
     sampleReviews: [

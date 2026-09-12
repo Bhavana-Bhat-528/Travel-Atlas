@@ -42,6 +42,21 @@
     </div>
   </div>
 
+  <!-- Interactive Multi-Destination Geoapify Map -->
+  <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
+    <div class="d-flex align-items-center justify-content-between mb-3 px-1">
+      <h5 class="fw-bold mb-0">
+        <i class="fa-solid fa-map-location-dot text-primary me-2"></i> Interactive Explorer Map
+      </h5>
+      <span class="badge bg-light text-muted border">Live Geoapify Atlas</span>
+    </div>
+    <div
+      id="cluster-map"
+      data-destinations="<%= mapData %>"
+      data-geoapify-key="<%= typeof geoapifyApiKey !== 'undefined' ? geoapifyApiKey : '' %>"
+    ></div>
+  </div>
+
   <!-- Destination Cards Grid -->
   <div class="d-flex justify-content-between align-items-center mb-3">
     <% if(destinations && destinations.length > 0) { %>

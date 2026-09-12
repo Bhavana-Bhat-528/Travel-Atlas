@@ -357,6 +357,7 @@
           data-title="<%= destination.title %>"
           data-state="<%= destination.state %>"
           data-country="<%= destination.country %>"
+          data-geoapify-key="<%= typeof geoapifyApiKey !== 'undefined' ? geoapifyApiKey : '' %>"
         ></div>
         <div class="mt-3 text-muted small">
           <i class="fa-solid fa-compass me-1"></i> Coordinates: <%= destination.coordinates.latitude.toFixed(4) %>, <%= destination.coordinates.longitude.toFixed(4) %>

@@ -7,18 +7,19 @@ const seedDestinations = require('./utils/seedData');
 
 const seedDB = async () => {
   try {
-    let connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/travelAtlas';
+    let connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/travelatlas';
     try {
-      await mongoose.connect(connStr);
+      const conn = await mongoose.connect(connStr);
+      console.log(`[Seed Script] Connected to MongoDB Atlas host: ${conn.connection.host} (Database: ${conn.connection.name})`);
     } catch (dbErr) {
       if (dbErr.message && dbErr.message.includes('already exists with different case')) {
         connStr = connStr.replace(/\/travelAtlas/i, '/travelatlas');
-        await mongoose.connect(connStr);
+        const conn = await mongoose.connect(connStr);
+        console.log(`[Seed Script] Connected to MongoDB Atlas host: ${conn.connection.host} (Database: ${conn.connection.name})`);
       } else {
         throw dbErr;
       }
     }
-    console.log('[Seed Script] Connected to MongoDB.');
 
     // Clear existing data
     await User.deleteMany({});
@@ -99,9 +100,13 @@ const seedDB = async () => {
     }
 
     console.log('\n✅ Database Seeding Completed Successfully!');
+    await mongoose.connection.close();
     process.exit(0);
   } catch (err) {
     console.error(`❌ [Seed Error] ${err.message}`);
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.connection.close();
+    }
     process.exit(1);
   }
 };
