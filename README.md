@@ -119,34 +119,48 @@ Authenticated users can contribute new sightseeing destinations to the TravelAtl
 
 ---
 
+## 🏗️ System Architecture
+
+```mermaid
+flowchart LR
+    subgraph Client ["Client Browser"]
+        A[EJS + Bootstrap UI]
+    end
+
+    subgraph Server ["Express Server (Render)"]
+        B[Routes]
+        D[Middleware]
+        C[Controllers]
+    end
+
+    subgraph Data ["Data Layer"]
+        E[(MongoDB Atlas)]
+        F[Cloudinary]
+    end
+
+    subgraph APIs ["External APIs"]
+        G[Geoapify Geocoding]
+        H[Open-Meteo Weather]
+    end
+
+    A -- "HTTP Request" --> B
+    B --> D
+    D --> C
+    C --> E
+    C --> F
+    C --> G
+    C --> H
+```
+
+---
+
 ## 🔄 How It Works
 
-```text
-┌─────────────────┐
-│   Discover      │
-│  Destinations   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│     Explore     │
-│ Search & Filter │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   Destination   │
-│      Page       │
-│ Map • Metrics   │
-│ Reviews • Tips  │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│    Contribute   │
-│ Reviews & New   │
-│   Destinations  │
-└─────────────────┘
+```mermaid
+flowchart TD
+    A[Discover Destinations] --> B[Explore Search & Filter]
+    B --> C[Destination Page Map + Metrics + Reviews]
+    C --> D[Contribute Reviews & New Destinations]
 ```
 
 - **Discover** — Browse destinations through the main catalog.
@@ -154,6 +168,17 @@ Authenticated users can contribute new sightseeing destinations to the TravelAtl
 - **View** — Open a destination page to see its details, map, travel metrics, ratings, and reviews.
 - **Contribute** — Authenticated users can add destinations and share reviews and travel tips.
 - **Consolidate** — Duplicate destination checks help keep information organized around a single destination page.
+
+---
+
+## 🌐 API References
+
+| Service | Purpose | Type | Documentation |
+| :--- | :--- | :--- | :--- |
+| **[Geoapify Geocoding API](https://www.geoapify.com/geocoding-api)** | Forward & reverse geocoding for destination address resolution & duplicate detection | External REST API (API Key required) | [Geoapify Docs](https://apidocs.geoapify.com/) |
+| **[Open-Meteo Weather API](https://open-meteo.com/)** | Live weather data (temperature, humidity, wind, conditions) by latitude & longitude | External REST API (No key required) | [Open-Meteo Docs](https://open-meteo.com/en/docs) |
+| **[Cloudinary API](https://cloudinary.com/)** | Cloud storage, transformation, and delivery for destination & review image uploads | Cloud Media SDK / API | [Cloudinary Docs](https://cloudinary.com/documentation) |
+| **[OpenStreetMap & Leaflet.js](https://leafletjs.com/)** | Map tile layers and client-side interactive map visualization | Frontend Library & Tile Provider | [Leaflet Docs](https://leafletjs.com/reference.html) |
 
 ---
 
